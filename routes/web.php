@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/login', ['uses' => 'Auth\LoginController@login_view', 'as' => 'login.view']);
+
+Route::group(['prefix' => 'users'], function () {
+    Route::get('/spending-users', ['uses' => 'UserController@index', 'as' => 'user.spending']);
+});

@@ -6,10 +6,10 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Sufee Admin - HTML5 Admin Template</title>
+    <title>@yield('pageTitle') | Monita - Blog Manager</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script src="{{ URL::asset('assets/js/vendor/jquery-2.1.4.min.js') }}"></script>
     <link rel="apple-touch-icon" href="apple-icon.png">
     <link rel="shortcut icon" href="favicon.ico">
 
@@ -24,7 +24,7 @@
     <link href="{{ URL::asset('assets/css/lib/vector-map/jqvmap.min.css') }} " rel="stylesheet">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 </head>
@@ -53,7 +53,7 @@
         <div class="col-sm-4">
             <div class="page-header float-left">
                 <div class="page-title">
-                    <h1>Dashboard</h1>
+                    <h1>@yield('pageTitle')</h1>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
             <div class="page-header float-right">
                 <div class="page-title">
                     <ol class="breadcrumb text-right">
-                        <li class="active">Dashboard</li>
+                        <li class="active">@yield('pageTitle')</li>
                     </ol>
                 </div>
             </div>
@@ -76,37 +76,20 @@
 
 <!-- Right Panel -->
 
-<script src="{{ URL::asset('assets/js/vendor/jquery-2.1.4.min.js') }}"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
 <script src="{{ URL::asset('assets/js/plugins.js') }}"></script>
 <script src="{{ URL::asset('assets/js/main.js') }}"></script>
 
 
-<script src="{{ URL::asset('assets/js/lib/chart-js/Chart.bundle.js') }}"></script>
+<!--<script src="{{ URL::asset('assets/js/lib/chart-js/Chart.bundle.js') }}"></script>
 <script src="{{ URL::asset('assets/js/dashboard.js') }}"></script>
 <script src="{{ URL::asset('assets/js/widgets.js') }}"></script>
 <script src="{{ URL::asset('assets/js/lib/vector-map/jquery.vmap.js') }}"></script>
 <script src="{{ URL::asset('assets/js/lib/vector-map/jquery.vmap.min.js') }}"></script>
 <script src="{{ URL::asset('assets/js/lib/vector-map/jquery.vmap.sampledata.js') }}"></script>
-<script src="{{ URL::asset('assets/js/lib/vector-map/country/jquery.vmap.world.js') }}"></script>
-<script>
-    ( function ( $ ) {
-        "use strict";
+<script src="{{ URL::asset('assets/js/lib/vector-map/country/jquery.vmap.world.js') }}"></script>-->
 
-        jQuery( '#vmap' ).vectorMap( {
-            map: 'world_en',
-            backgroundColor: null,
-            color: '#ffffff',
-            hoverOpacity: 0.7,
-            selectedColor: '#1de9b6',
-            enableZoom: true,
-            showTooltip: true,
-            values: sample_data,
-            scaleColors: [ '#1de9b6', '#03a9f5' ],
-            normalizeFunction: 'polynomial'
-        } );
-    } )( jQuery );
-</script>
 
 </body>
 </html>
