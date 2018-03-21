@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use JWTAuth;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
+use App\BlogUser;
 class UserController extends Controller
 {
     //
     public function index(Request $request)
     {
 
-     //   var_dump(GET_NEW_USER_REGISTER);exit();
-        $obj_temp =null;
+
+        $obj_temp =[];
         try {
             $guzzle_http_client = new Client([ 'timeout'  => 20.0]);
             $url_test = GET_NEW_USER_REGISTER;
@@ -23,11 +24,34 @@ class UserController extends Controller
             $promise->wait();
             $obj_temp = json_decode($this->response_data,true);
 
-            var_dump($obj_temp[0]['ID']); exit(0);
-        } catch (\Exception $e) {
-            var_dump(e);exit(0);
-        }
+            //$user = BlogUser::firstOrNew(array('name' => Input::get('name')));
+            foreach ($obj_temp as $obj){
 
-        return view('page.spending_user');
+                $user_check = BlogUser::firstOrNew([
+                    'user_id' => $obj['id'],
+                    'status' => 0,
+                ]);
+                if (!$user_check->exists) {
+                    $user = new BlogUser();
+                    $user->user_id = $obj['id'];
+                    $user->name= $obj['login_name'];
+                    $user->email= $obj['email'];
+                    $user->phone= $obj['phone'];
+                    $user->facebook= $obj['facebook'];
+                    $user->twitter= '';
+                    $user->facebook_price=0;
+                    $user->twitter_price=0;
+                    $user->zalo_price=0;
+                    $user->status= 0;
+                    $user->save();
+                }
+
+            }
+
+        } catch (\Exception $e) {
+            //var_dump(e);exit(0);
+        }
+       // var_dump($obj_temp);exit();
+        return view('page.spending_user',['users'=>$obj_temp]);
     }
 }

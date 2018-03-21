@@ -14,6 +14,7 @@
                         <table id="bootstrap-data-table" class="table table-striped table-bordered">
                             <thead>
                             <tr>
+                                <th>Login Name</th>
                                 <th>Email</th>
                                 <th>Facebook Profile</th>
                                 <th>Facebook Price</th>
@@ -21,16 +22,20 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @foreach($users as $user)
                             <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
-                                <td>Edinburgh</td>
+                                <td>{{$user['login_name']}}</td>
+                                <td>{{$user['email']}}</td>
+                                <td>
+                                    <a target="_blank" href="{{$user['facebook']}}">{{htmlspecialchars($user['facebook'])}}</a>
+                                </td>
+                                <td>0</td>
                                 <td style="text-align: right">
                                     <button type="button" class="btn btn-success">Price</button>
                                     <button type="button" class="btn btn-primary">Aprroved</button>
                                 </td>
                             </tr>
-
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
