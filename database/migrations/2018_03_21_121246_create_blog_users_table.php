@@ -16,7 +16,7 @@ class CreateBlogUsersTable extends Migration
         Schema::create('blog_users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('user_id')->nullable()->unique();
+            $table->string('user_id')->unique();
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
