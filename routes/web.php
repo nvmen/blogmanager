@@ -19,4 +19,6 @@ Route::get('/login', ['uses' => 'Auth\LoginController@login_view', 'as' => 'logi
 
 Route::group(['prefix' => 'users'], function () {
     Route::get('/blog-users', ['uses' => 'UserController@index', 'as' => 'user.blog']);
+    Route::get('/detail/{user_id}', ['uses' => 'UserController@detail', 'as' => 'user.blog.detail']);
+    Route::post('/update-price', ['uses' => 'UserController@save_price', 'as' => 'user.blog.detail.update']);
 });

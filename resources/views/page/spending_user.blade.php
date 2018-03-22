@@ -18,7 +18,7 @@
                                 <th>Login Name</th>
                                 <th>Email</th>
                                 <th>Facebook Profile</th>
-                                <th>Facebook Price</th>
+                                <th>Facebook - Zalo - twitter - Price</th>
                                 <th>Approved</th>
                             </tr>
                             </thead>
@@ -28,11 +28,11 @@
                                 <td>{{$user['name']}}</td>
                                 <td>{{$user['email']}}</td>
                                 <td>
-                                    <a target="_blank" href="{{$user['facebook']}}">{{htmlspecialchars($user['facebook'])}}</a>
+                                    <a  onclick="show_facebook_view('{{$user['facebook']}}')" href="javascript:void(0)">{{htmlspecialchars($user['facebook'])}}</a>
                                 </td>
-                                <td>0</td>
+                                <td>{{$user['facebook_price']}} - {{$user['zalo_price']}} - {{$user['twitter_price']}} </td>
                                 <td style="text-align: right">
-                                    <button type="button" class="btn btn-success" onclick="show_price('{{$user['user_id']}}')">Price</button>
+                                    <button type="button" class="btn btn-success" onclick="show_price('{{route('user.blog.detail',['user_id'=>$user->user_id])}}')">Price</button>
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#smallmodal">Aprroved</button>
                                 </td>
                             </tr>
@@ -60,17 +60,17 @@
                     <form>
                         <div class="form-group">
                             <label for="facebook_price" class="control-label">Facebook Price(VND)</label>
-                            <input type="number" class="form-control" id="username" name="facebook_price" value="" required="true"  placeholder="2000 vnd">
+                            <input type="number" class="form-control" id="facebook_price" name="facebook_price" value="" required="true"  placeholder="2000 vnd">
                             <span class="help-block"></span>
                         </div>
                         <div class="form-group">
                             <label for="zalo_price" class="control-label">Zalo Price(VND)</label>
-                            <input type="number" class="form-control" id="zalo_price" name="zalo_price" value="" required="" title="Please enter your password">
+                            <input type="number" class="form-control" id="zalo_price" name="zalo_price" value="" required="" title="2000 vnd">
                             <span class="help-block"></span>
                         </div>
                         <div class="form-group">
                             <label for="twitter_price" class="control-label">Twitter Price(VND)</label>
-                            <input type="number" class="form-control" id="twitter_price" name="twitter_price" value="" required="" title="">
+                            <input type="number" class="form-control" id="twitter_price" name="twitter_price" value="" required="" title="2000 vnd">
                             <span class="help-block"></span>
                         </div>
 
@@ -78,7 +78,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" onclick="save_price()">Save</button>
                 </div>
             </div>
         </div>
@@ -105,12 +105,48 @@
     </div>
 
 <script>
-    function show_price(user_id){
-        // alert(user_id);
+    var token = '{{ csrf_token() }}';
+    var currentUser = null;
+    function show_price(link){
+        jQuery.get( link, function( result ) {
+            currentUser = result.data;
+            jQuery('#facebook_price').val(currentUser.facebook_price);
+            jQuery('#twitter_price').val(currentUser.twitter_price);
+            jQuery('#zalo_price').val(currentUser.zalo_price);
+            jQuery('#pricemodal').modal('show');
+        });
 
+    }
+    function save_price (){
+        var url ='{{route('user.blog.detail.update')}}';
+        $.post( url, {
+            _token: token,
+            user_id: currentUser.user_id,
+            facebook_price:  jQuery('#facebook_price').val(),
+            twitter_price:  jQuery('#twitter_price').val(),
+            zalo_price:  jQuery('#zalo_price').val(),
+            })
+            .done(function( data ) {
+                alert( "Save ok: " + data );
+            });
+    }
+    function show_facebook_view(url){
+        var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : window.screenX;
+        var dualScreenTop = window.screenTop != undefined ? window.screenTop : window.screenY;
+        var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+        var w = width*0.8;
+        var h = height*0.8;
+        var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+        var top = ((height / 2) - (h / 2)) + dualScreenTop;
+       // window.open (url, "Facebook Window","location=1,status=1,scrollbars=1, width=500,height=500");
+        var title = "Facebook viewer";
+        var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
 
-        jQuery('#pricemodal').modal('show');
-
+        // Puts focus on the newWindow
+        if (window.focus) {
+            newWindow.focus();
+        }
     }
 
 

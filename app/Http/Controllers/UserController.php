@@ -31,7 +31,6 @@ class UserController extends Controller
 
                     $user_check = BlogUser::firstOrNew([
                         'user_id' => $obj['id'],
-                        'status' => 0,
                     ]);
                     if (!$user_check->exists) {
                         $user = new BlogUser();
@@ -41,11 +40,20 @@ class UserController extends Controller
                         $user->phone= $obj['phone'];
                         $user->facebook= $obj['facebook'];
                         $user->twitter= '';
-                        $user->facebook_price=0;
-                        $user->twitter_price=0;
-                        $user->zalo_price=0;
-                        $user->status= 0;
+                        $user->facebook_price = 0;
+                        $user->twitter_price = 0;
+                        $user->zalo_price = 0;
+                        $user->status = 0;
                         $user->save();
+                    }else{
+                        if($user_check->status == 0){
+                            // update data in to system
+                            $user_check->name= $obj['login_name'];
+                            $user_check->email= $obj['email'];
+                            $user_check->phone= $obj['phone'];
+                            $user_check->facebook= $obj['facebook'];
+                            $user_check->save();
+                        }
                     }
 
                 }
@@ -58,5 +66,31 @@ class UserController extends Controller
        // var_dump($obj_temp);exit();
         $users = BlogUser::all();
         return view('page.spending_user',['users'=>$users]);
+    }
+
+    public  function get_share_by_user(Request $request){
+
+    }
+    public  function  detail($user_id){
+        $user = BlogUser::where('user_id', $user_id)->first(); // model or null
+        return response()->json(['success' => true, 'data' => $user]);
+
+    }
+    public  function  save_price(Request $request){
+
+        $user_id  = $request['user_id'];
+        $facebook_price  = $request['facebook_price'];
+        $twitter_price  = $request['twitter_price'];
+        $zalo_price  = $request['zalo_price'];
+        $user = BlogUser::where('user_id', $user_id)->first(); // model or null
+        if($user == null){
+            return response()->json(['success' => false,'message'=>'User does not exit']);
+        }
+        $user->facebook_price= $facebook_price;
+        $user->twitter_price= $twitter_price;
+        $user->zalo_price= $zalo_price;
+        $user->save();
+        return response()->json(['success' => true]);
+
     }
 }
