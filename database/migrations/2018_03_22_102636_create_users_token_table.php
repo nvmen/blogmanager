@@ -16,8 +16,8 @@ class CreateUsersTokenTable extends Migration
         Schema::create('token_users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('user_id')->nullable()->unique();
-            $table->string('token')->notnum();
+            $table->string('user_id');
+            $table->string('token');
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

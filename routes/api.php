@@ -17,3 +17,5 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+Route::post('save-token', ['uses' => 'APIBlogUserController@save_token', 'as' => 'user.token']);
+   

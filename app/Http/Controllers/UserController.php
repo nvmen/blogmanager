@@ -68,11 +68,11 @@ class UserController extends Controller
         }
 
         $users = BlogUser::all();
-        if($search!==''){
-            $users =  BlogUser::where('name','like',"%$search%")
-                            ->orWhere('email','like',"%$search%")
-                           ->orWhere('facebook','like',"%$search%")
-                            ->orWhere('phone','like',"%$search%")->get();
+        if ($search !== '') {
+            $users = BlogUser::where('name', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%")
+                ->orWhere('facebook', 'like', "%$search%")
+                ->orWhere('phone', 'like', "%$search%")->get();
         }
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 20;
@@ -80,7 +80,7 @@ class UserController extends Controller
         $paginatedSearchResults = new LengthAwarePaginator($temp, count($users), $perPage);
         $paginatedSearchResults->appends(['search' => $request['search']]);
         $paginatedSearchResults->setPath(route('user.blog'));
-      //  var_dump($users);exit();
+        //  var_dump($users);exit();
         return view('page.spending_user', ['users' => $paginatedSearchResults]);
     }
 
@@ -117,14 +117,26 @@ class UserController extends Controller
 
     public function approve_user(Request $request)
     {
-        $user_id = $request['user_id'];
-        $status = $request['status'];
-        $user = BlogUser::where('user_id', $user_id)->first(); // model or null
-        if ($user == null) {
-            return response()->json(['success' => false, 'message' => 'User does not exit']);
-        }
-        $user->status = $status == true ? 1 : 0;
-        $user->save();
+        $response_data = null;
+        $url_temp = 'http://localhost/monitablog/wp-json/wp/v2/users/updateuser';
+        $client = new Client();
+        $token = TOKEN_ACCESS_BLOG;
+        $response = $client->request('POST', $url_temp, [
+            'headers' => [
+                'User-Agent' => 'testing/1.0',
+                'Accept'     => 'application/json',
+                'X-Foo'      => ['Bar', 'Baz'],
+                'token'      =>$token,
+            ],
+            'body' =>'{
+                    "user_id":"3",
+                    "key":"status_account",
+                    "value":"true"}'
+
+        ]);
+
+
+        var_dump($response->getBody()->getContents());exit(0);
         return response()->json(['success' => true]);
     }
 }

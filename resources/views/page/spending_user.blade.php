@@ -57,7 +57,7 @@
                                         </button>
                                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                                 data-target="#smallmodal"
-                                                onclick="approve_user('{{$user->user_id}}','{{$user->status==0?true:false}}')">{{$user->status==0?'Approve':'Disapprove'}}</button>
+                                                onclick="approve_user('{{$user->user_id}}','{{$user->status==0?1:0}}')">{{$user->status==0?'Approve':'Disapprove'}}</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -79,8 +79,8 @@
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="smallmodalLabel">Set Price for User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <h5 class="modal-title" id="smallmodalLabe">Set Price for User</h5>
+                    <button type="button" class="close" data-dismliss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
