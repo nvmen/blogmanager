@@ -16,6 +16,10 @@ use App\Social;
 
 class SocialController  extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(){
 
         $list = Social::all();
@@ -23,9 +27,12 @@ class SocialController  extends Controller
     }
     public function update(Request $request){
         $social_id = $request['id'];
-        $social = Social::find($social_id )->first();
-        $social->status = $request['status'];
+
+        $social = Social::find($social_id );
+
+        $social->status = 1;
         $social->save();
+
         return response()->json(['success' => true]);
     }
 }

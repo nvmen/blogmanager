@@ -19,12 +19,15 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/css/flag-icon.min.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('assets/css/cs-skin-elastic.css') }}">
+
     <!-- <link rel="stylesheet" href="assets/css/bootstrap-select.less"> -->
     <link rel="stylesheet" href="{{ URL::asset('assets/scss/style.css') }}">
     <link href="{{ URL::asset('assets/css/lib/vector-map/jqvmap.min.css') }} " rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ URL::asset('css/loader.css') }}">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{{ URL::asset('js/jquery.nimble.loader.js') }}"></script>
+    <script src="{{ URL::asset('js/common.js') }}"></script>
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 </head>

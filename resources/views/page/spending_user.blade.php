@@ -162,17 +162,20 @@
         }
         function save_status() {
             var url = '{{route('user.blog.detail.approve')}}';
+            show_spinner();
             $.post(url, {
                         _token: token,
                         user_id: currentUser.user_id,
                         status: currentUser.status
                     })
                     .done(function (data) {
+                        hide_spinner();
                         window.location.reload();
                     });
         }
         function save_price() {
             var url = '{{route('user.blog.detail.update')}}';
+            show_spinner();
             $.post(url, {
                         _token: token,
                         user_id: currentUser.user_id,
@@ -181,6 +184,7 @@
                         zalo_price: jQuery('#zalo_price').val(),
                     })
                     .done(function (data) {
+                        hide_spinner();
                         window.location.reload();
                     });
         }

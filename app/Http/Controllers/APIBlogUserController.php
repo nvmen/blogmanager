@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use App\BlogUserToken;
-
+use App\Social;
 
 class APIBlogUserController extends Controller
 {
@@ -21,7 +21,6 @@ class APIBlogUserController extends Controller
     public function save_token(Request $request){
 
         $user_id = $request['user_id'];
-
         $token = $request['token'];
         // check user exist on system or not and status is active
         $blog_user = BlogUser::where('user_id','=',$user_id)->first();
@@ -40,4 +39,30 @@ class APIBlogUserController extends Controller
             'message'=> "Save ok");
         return response()->json($result, 200);
     }
+    public function get_price_user(Request $request){
+
+        //
+        $list_social = Social::where('status'==1)->get();
+        $data = $request->all();
+        $share = array
+        (
+            array("social"=>"Facebook","price"=>2000),
+            array("social"=>"Zalo","price"=>1000),
+            array("social"=>"Twitter","price"=>2000),
+            //  array("social"=>"Test","price"=>$data['link']),
+
+        );
+        return response()->json($share);
+
+    }
+    public function canshare(Request $request)
+    {
+        $value = rand(0,1) == 1;
+        $result = array('status' => $value,
+            'data' => array('payment' => true,
+                'money' => 2000));
+        return response()->json($result );
+    }
+
+
 }

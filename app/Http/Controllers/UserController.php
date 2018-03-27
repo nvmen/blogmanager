@@ -10,10 +10,15 @@ use App\BlogUser;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
-    //
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         $fetch_user = $request['fetch_user'];
@@ -118,7 +123,10 @@ class UserController extends Controller
     public function approve_user(Request $request)
     {
         $response_data = null;
-        $url_temp = 'http://localhost/monitablog/wp-json/wp/v2/users/updateuser';
+        $status = $request['status'];
+        $user_id = $request['user_id'];
+        $send_status = $status>1? true:false;
+        $url_temp = UPDATE_STATUS_USER;
         $client = new Client();
         $token = TOKEN_ACCESS_BLOG;
         $response = $client->request('POST', $url_temp, [
@@ -129,14 +137,21 @@ class UserController extends Controller
                 'token'      =>$token,
             ],
             'body' =>'{
-                    "user_id":"3",
+                    "user_id":"'.$user_id.'",
                     "key":"status_account",
-                    "value":"true"}'
+                    "value":"'.$send_status.'"}'
 
         ]);
 
 
-        var_dump($response->getBody()->getContents());exit(0);
+
+        $body = json_decode($response->getBody()->getContents());
+
+        if($body->status){
+            $user = BlogUser::where('user_id', $user_id)->first(); // model or null
+            $user->status = $status;
+            $user->save();
+        }
         return response()->json(['success' => true]);
     }
 }
