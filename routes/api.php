@@ -17,8 +17,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
-
-Route::group(['middleware' => 'jwt.auth'], function () {
+//Route::group(['middleware' => 'jwt.auth'], function () {
+Route::group([], function () {
     Route::get('user-price', ['uses' => 'APIBlogUserController@get_price_user', 'as' => 'user.price']);
 });
 
