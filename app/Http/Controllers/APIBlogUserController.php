@@ -16,7 +16,7 @@ use GuzzleHttp\Psr7;
 use App\BlogUserToken;
 use App\Social;
 use App\UserSharing;
-
+use Validator, Input, Redirect;
 class APIBlogUserController extends Controller
 {
 
@@ -83,8 +83,41 @@ class APIBlogUserController extends Controller
     public function add_tracking_user_share_post(Request $request)
     {
 
+        $token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL21vbml0YWJsb2ciLCJpYXQiOjE1MjI0MjYzMTYsIm5iZiI6MTUyMjQyNjMxNiwiZXhwIjoxNTIzMDMxMTE2LCJkYXRhIjp7InVzZXIiOnsiaWQiOiIzIn19fQ.AQe0BC3XtwemxUMLWAlSDXmBNmVl7QmSRuts1FOW_Dc';
+        $url_token_verify_token = VERIFY_TOKEN_BLOG;
+        $token_bearer ='Bearer '.$token;
+        $client = new Client();
+        $response = $client->request('POST', $url_token_verify_token, [
+            'headers' => [
+                'User-Agent' => 'testing/1.0',
+                'Accept'     => 'application/json',
+                'Authorization'     => $token_bearer,
+
+            ],
+            'body' =>'{}'
+
+        ]);
+
+
+
+        $body = json_decode($response->getBody()->getContents());
+        //dd($body->code);
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'post_link' => 'required',
+            'post_id' => 'required',
+            'platform' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $result = array('success' => false,
+                'message' => "Some thing wrong with input data.");
+            return response()->json($result, 404);
+        }
         // check user have share this post
         $post_link = $request['post_link'];
+        $post_id = $request['post_id'];
         $user_id = $request['user_id'];
         $platform = $request['platform'];
         $blog_user = BlogUser::find($user_id);
@@ -107,8 +140,33 @@ class APIBlogUserController extends Controller
                 'message' => "Platform doesn't active for earn money.");
             return response()->json($result, 200);
         }
-        // get price of this user for platform
-
+        // get price of this use =r for platform
+        $price = 0;
+        switch (strtoupper($platform)) {
+            case 'FACEBOOK': {
+                $price = $blog_user->facebook_price;
+                break;
+            }
+            case 'ZALO': {
+                $price = $blog_user->zalo_price;
+                break;
+            }
+            case 'TWITTER': {
+                $price = $blog_user->twitter_price;
+                break;
+            }
+        }
+        //dd($blog_user->facebook_price);
+        $usershare = new UserSharing();
+        $usershare->user_id = $user_id;
+        $usershare->post_link = $post_link;
+        $usershare->post_id = $post_id;
+        $usershare->platform = $platform;
+        $usershare->price = $price;
+        $usershare->save();
+        $result = array('success' => false,
+            'message' => "Thank you. You have earned ".$price ." vnd");
+        return response()->json($result, 200);
 
     }
 

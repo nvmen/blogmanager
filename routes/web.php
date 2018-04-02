@@ -25,6 +25,11 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('/approve-user', ['uses' => 'UserController@approve_user', 'as' => 'user.blog.detail.approve']);
     //Route::get('/approve-user', ['uses' => 'UserController@approve_user', 'as' => 'user.blog.detail.approve']);
 });
+Route::group(['prefix' => 'blog'], function () {
+    Route::get('/blog-share', ['uses' => 'BlogController@index', 'as' => 'blog.user.share']);
+    Route::get('/blog-detail', ['uses' => 'BlogController@details', 'as' => 'blog.user.share.details']);
+
+});
 
 Route::group(['prefix' => 'socials'], function () {
     Route::get('/', ['uses' => 'SocialController@index', 'as' => 'social.network']);

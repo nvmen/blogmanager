@@ -20,6 +20,7 @@ Route::get('/user', function (Request $request) {
 //Route::group(['middleware' => 'jwt.auth'], function () {
 Route::group([], function () {
     Route::get('user-price', ['uses' => 'APIBlogUserController@get_price_user', 'as' => 'user.price']);
+    Route::post('tracking-share', ['uses' => 'APIBlogUserController@add_tracking_user_share_post', 'as' => 'user.tracking.share.post']);
 });
 
 Route::post('save-token', ['uses' => 'APIBlogUserController@save_token', 'as' => 'user.token']);

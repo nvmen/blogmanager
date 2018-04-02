@@ -7,7 +7,7 @@
  */
 
 namespace App;
-
+use App\BlogUser;
 use Illuminate\Database\Eloquent\Model;
 class UserSharing  extends Model
 {
@@ -24,5 +24,11 @@ class UserSharing  extends Model
         'status',
         'created_at',
         'updated_at',
+
     ];
+    public function blog_users()
+    {
+        return $this->belongsToMany('App\BlogUser');
+    }
+
 }
