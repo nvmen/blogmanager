@@ -21,6 +21,8 @@ Route::get('/user', function (Request $request) {
 Route::group([], function () {
     Route::get('user-price', ['uses' => 'APIBlogUserController@get_price_user', 'as' => 'user.price']);
     Route::post('tracking-share', ['uses' => 'APIBlogUserController@add_tracking_user_share_post', 'as' => 'user.tracking.share.post']);
+    Route::get('list-share-post', ['uses' => 'APIBlogUserController@get_sharing_by_user', 'as' => 'user.list.share.post']);
+    Route::get('user-info', ['uses' => 'APIBlogUserController@get_user_info', 'as' => 'user.info']);
 });
 
 Route::post('save-token', ['uses' => 'APIBlogUserController@save_token', 'as' => 'user.token']);

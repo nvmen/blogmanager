@@ -17,6 +17,8 @@ use App\BlogUserToken;
 use App\Social;
 use App\UserSharing;
 use Validator, Input, Redirect;
+use GuzzleHttp\Exception\RequestException;
+
 class APIBlogUserController extends Controller
 {
 
@@ -83,25 +85,35 @@ class APIBlogUserController extends Controller
     public function add_tracking_user_share_post(Request $request)
     {
 
-        $token ='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL21vbml0YWJsb2ciLCJpYXQiOjE1MjI0MjYzMTYsIm5iZiI6MTUyMjQyNjMxNiwiZXhwIjoxNTIzMDMxMTE2LCJkYXRhIjp7InVzZXIiOnsiaWQiOiIzIn19fQ.AQe0BC3XtwemxUMLWAlSDXmBNmVl7QmSRuts1FOW_Dc';
+        $header = $request->header('Authorization');
+        $token = str_replace('Bearer ', '', $header);
         $url_token_verify_token = VERIFY_TOKEN_BLOG;
-        $token_bearer ='Bearer '.$token;
+        $token_bearer = 'Bearer ' . $token;
         $client = new Client();
-        $response = $client->request('POST', $url_token_verify_token, [
-            'headers' => [
-                'User-Agent' => 'testing/1.0',
-                'Accept'     => 'application/json',
-                'Authorization'     => $token_bearer,
 
-            ],
-            'body' =>'{}'
+        $body = null;
+        try {
+            $response = $client->request('POST', $url_token_verify_token, [
+                'headers' => [
+                    'User-Agent' => 'testing/1.0',
+                    'Accept' => 'application/json',
+                    'Authorization' => $token_bearer,
+                ],
+                'body' => '{}'
 
-        ]);
+            ]);
+            $body = json_decode($response->getBody()->getContents());
+        } catch (RequestException $e) {
+            $result = array('success' => false,
+                'message' => "Some thing wrong with authentication.");
+            return response()->json($result, 404);
+        }
 
-
-
-        $body = json_decode($response->getBody()->getContents());
-        //dd($body->code);
+        if($body->code  != 'jwt_auth_valid_token'){
+            $result = array('success' => false,
+                'message' => "Some thing wrong with authentication.");
+            return response()->json($result, 404);
+         }
 
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
@@ -165,9 +177,31 @@ class APIBlogUserController extends Controller
         $usershare->price = $price;
         $usershare->save();
         $result = array('success' => false,
-            'message' => "Thank you. You have earned ".$price ." vnd");
+            'message' => "Thank you. You have earned " . $price . " vnd");
         return response()->json($result, 200);
 
+    }
+
+    public function get_sharing_by_user(Request $request)
+    {
+        $header = $request->header('Authorization');
+        $token = str_replace('Bearer ', '', $header);
+        // find user by token
+         $blog_user_token = BlogUserToken::where('token',$token)->orderBy('created_at', 'desc')->first();
+         $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
+         //dd($list_share);
+        return response()->json($list_share, 200);
+    }
+    public function get_user_info(Request $request)
+    {
+        $header = $request->header('Authorization');
+        $token = str_replace('Bearer ', '', $header);
+        // find user by token
+        $blog_user_token = BlogUserToken::where('token',$token)->orderBy('created_at', 'desc')->first();
+       // $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
+        $blog_user = BlogUser::where('user_id',$blog_user_token->user_id)->first();
+        //dd($list_share);
+        return response()->json($blog_user, 200);
     }
 
 }
