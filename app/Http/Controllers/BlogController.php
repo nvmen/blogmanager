@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use App\PostBlog;
 use App\UserSharing;
 use JWTAuth;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use DB;
+
 class BlogController extends Controller
 {
     public function __construct()
@@ -28,17 +30,17 @@ class BlogController extends Controller
 
     public function index(Request $request)
     {
-        $post_links = UserSharing::select('post_link','id')->distinct()->get();
+        $post_links = UserSharing::select('post_link', 'id')->distinct()->get();
 
         $search = $request['search'];
-        if($search!=''){
-            $post_links = UserSharing::select('post_link','id')->where('post_link', 'like','%$search%')->distinct()->get();
+        if ($search != '') {
+            $post_links = UserSharing::select('post_link', 'id')->where('post_link', 'like', '%$search%')->distinct()->get();
         }
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 2;
         $temp = $post_links->forPage($currentPage, $perPage);
-        foreach ($temp as &$t){
-            $sum_payment = UserSharing::groupBy('post_link')->where('post_link',$t->post_link)->selectRaw('sum(price) as sum')->get()->first();
+        foreach ($temp as &$t) {
+            $sum_payment = UserSharing::groupBy('post_link')->where('post_link', $t->post_link)->selectRaw('sum(price) as sum')->get()->first();
             $t['balance'] = 100;
             $t['total_pay'] = $sum_payment->sum;
 
@@ -48,16 +50,29 @@ class BlogController extends Controller
 
         $paginatedSearchResults->appends(['search' => $request['search']]);
         $paginatedSearchResults->setPath(route('blog.user.share'));
-        return view('page.blog_sharing',['blogs' => $paginatedSearchResults]);
+        return view('page.blog_sharing', ['blogs' => $paginatedSearchResults]);
     }
-    public function details($id){
 
-        $post_link = UserSharing::where('id',$id)->first();
-        $post_links = UserSharing::where('post_link',$post_link->post_link)->get();
+    public function details($id)
+    {
 
-       // dd(($post_links));
-        
-        return view('page.post_detail',['post'=>$post_links]);
+        $post_link = UserSharing::where('id', $id)->first();
+        $post_links = UserSharing::where('post_link', $post_link->post_link)->get();
+        $total_pay = UserSharing::where('post_link', $post_link->post_link)->sum('price');
+        //dd($total_pay);
+        $post_info = $this->get_post_info_from_blog($post_link->post_id);
+        $post_info->link = $post_link->post_link;
+        return view('page.post_detail', ['posts' => $post_links, 'total_pay' => $total_pay, 'post_info' => $post_info]);
+    }
+
+    private function get_post_info_from_blog($blog_id)
+    {
+        $post_blog = new PostBlog();
+        $post_blog->id = 1;
+        $post_blog->is_campaign = true;
+        $post_blog->budget = 2000000;
+
+        return $post_blog;
     }
 
 }
