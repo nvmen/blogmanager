@@ -11,6 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+
 class UserController extends Controller
 {
 
@@ -48,6 +49,7 @@ class UserController extends Controller
                         $user->phone = $obj['phone'];
                         $user->facebook = $obj['facebook'];
                         $user->twitter = '';
+                        $user->is_fanpage = 1;
                         $user->facebook_price = 0;
                         $user->twitter_price = 0;
                         $user->zalo_price = 0;
@@ -125,33 +127,45 @@ class UserController extends Controller
         $response_data = null;
         $status = $request['status'];
         $user_id = $request['user_id'];
-        $send_status = $status>1? true:false;
+        $send_status = $status > 1 ? true : false;
         $url_temp = UPDATE_STATUS_USER;
         $client = new Client();
         $token = TOKEN_ACCESS_BLOG;
         $response = $client->request('POST', $url_temp, [
             'headers' => [
                 'User-Agent' => 'testing/1.0',
-                'Accept'     => 'application/json',
-                'X-Foo'      => ['Bar', 'Baz'],
-                'token'      =>$token,
+                'Accept' => 'application/json',
+                'X-Foo' => ['Bar', 'Baz'],
+                'token' => $token,
             ],
-            'body' =>'{
-                    "user_id":"'.$user_id.'",
+            'body' => '{
+                    "user_id":"' . $user_id . '",
                     "key":"status_account",
-                    "value":"'.$send_status.'"}'
+                    "value":"' . $send_status . '"}'
 
         ]);
 
 
-
         $body = json_decode($response->getBody()->getContents());
 
-        if($body->status){
+        if ($body->status) {
             $user = BlogUser::where('user_id', $user_id)->first(); // model or null
             $user->status = $status;
             $user->save();
         }
         return response()->json(['success' => true]);
+    }
+
+    public function update_fanpage(Request $request)
+    {
+        $user_id = $request['id'];
+        $status = $request['status'];
+       $blog_user = BlogUser::where('user_id',$user_id)->first();
+        if($blog_user == null){
+            return response()->json(['success' => false, 'data' => 'fail']);
+        }
+        $blog_user->is_fanpage = $status;
+        $blog_user->save();
+        return response()->json(['success' => true, 'data' => 'ok']);
     }
 }

@@ -19,6 +19,7 @@ class BlogUser extends Model
         'email',
         'phone',
         'facebook',
+        'is_fanpage',
         'twitter',
         'status',
         'facebook_price',

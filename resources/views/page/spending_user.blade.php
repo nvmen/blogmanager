@@ -35,6 +35,7 @@
                                 <th>Login Name</th>
                                 <th>Email</th>
                                 <th>Facebook Profile</th>
+                                <th>Fanpage</th>
                                 <th>Facebook - Zalo - twitter - Price</th>
                                 <th>Approved</th>
                             </tr>
@@ -47,6 +48,9 @@
                                     <td>
                                         <a onclick="show_facebook_view('{{$user['facebook']}}')"
                                            href="javascript:void(0)">{{htmlspecialchars($user['facebook'])}}</a>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="" class="form-check" @if($user->is_fanpage)checked @endif onclick="do_action(this,'{{$user->user_id}}')"/>
                                     </td>
                                     <td>{{$user['facebook_price']}} - {{$user['zalo_price']}}
                                         - {{$user['twitter_price']}} </td>
@@ -207,6 +211,23 @@
             }
         }
 
-
+        function do_action(e,id){
+            var url ='{{route('user.blog.fanpage.update')}}';
+            let status = 0;
+            if (e.checked) {
+                status =1;
+            }
+            $.post(url, {
+                        _token: token,
+                        id: id,
+                        status:status
+                    })
+                    .done(function (data) {
+                      //  alert('Update Ok');
+                    });
+        }
     </script>
+
+
+
 @stop

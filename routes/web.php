@@ -23,11 +23,11 @@ Route::group(['prefix' => 'users'], function () {
     Route::get('/detail/{user_id}', ['uses' => 'UserController@detail', 'as' => 'user.blog.detail']);
     Route::post('/update-price', ['uses' => 'UserController@save_price', 'as' => 'user.blog.detail.update']);
     Route::post('/approve-user', ['uses' => 'UserController@approve_user', 'as' => 'user.blog.detail.approve']);
-    //Route::get('/approve-user', ['uses' => 'UserController@approve_user', 'as' => 'user.blog.detail.approve']);
+    Route::post('/update-fanpage', ['uses' => 'UserController@update_fanpage', 'as' => 'user.blog.fanpage.update']);
 });
 Route::group(['prefix' => 'blog'], function () {
     Route::get('/blog-share', ['uses' => 'BlogController@index', 'as' => 'blog.user.share']);
-    Route::get('/blog-detail', ['uses' => 'BlogController@details', 'as' => 'blog.user.share.details']);
+    Route::get('/blog-detail/{id}', ['uses' => 'BlogController@details', 'as' => 'blog.user.share.details']);
 
 });
 

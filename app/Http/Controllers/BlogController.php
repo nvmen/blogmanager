@@ -28,13 +28,12 @@ class BlogController extends Controller
 
     public function index(Request $request)
     {
-        $post_links = UserSharing::select('post_link')->distinct()->get();
-        $posts = DB::table('user_sharing')
-            ->select('post_link')
-            ->groupBy('post_link')
-            ->get('*');
-      //  dd($users[1]->blog_users());
+        $post_links = UserSharing::select('post_link','id')->distinct()->get();
+
         $search = $request['search'];
+        if($search!=''){
+            $post_links = UserSharing::select('post_link','id')->where('post_link', 'like','%$search%')->distinct()->get();
+        }
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 2;
         $temp = $post_links->forPage($currentPage, $perPage);
@@ -44,14 +43,21 @@ class BlogController extends Controller
             $t['total_pay'] = $sum_payment->sum;
 
         }
+        //dd($temp);
         $paginatedSearchResults = new LengthAwarePaginator($temp, count($post_links), $perPage);
 
         $paginatedSearchResults->appends(['search' => $request['search']]);
         $paginatedSearchResults->setPath(route('blog.user.share'));
         return view('page.blog_sharing',['blogs' => $paginatedSearchResults]);
     }
-    public function details(Request $request){
+    public function details($id){
 
+        $post_link = UserSharing::where('id',$id)->first();
+        $post_links = UserSharing::where('post_link',$post_link->post_link)->get();
+
+       // dd(($post_links));
+        
+        return view('page.post_detail',['post'=>$post_links]);
     }
 
 }
