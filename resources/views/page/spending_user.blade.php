@@ -43,8 +43,8 @@
                             <tbody>
                             @foreach($users as $user)
                                 <tr>
-                                    <td>{{$user['name']}}</td>
-                                    <td>{{$user['email']}}</td>
+                                    <td><a  href= "{{route('user.blog.detail',['id'=>$user->user_id])}}">{{$user['name']}}</a></td>
+                                    <td><a  href= "{{route('user.blog.detail',['id'=>$user->user_id])}}">{{$user['email']}}</a></td>
                                     <td>
                                         <a onclick="show_facebook_view('{{$user['facebook']}}')"
                                            href="javascript:void(0)">{{htmlspecialchars($user['facebook'])}}</a>

@@ -11,7 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-
+use App\UserSharing;
 class UserController extends Controller
 {
 
@@ -168,4 +168,14 @@ class UserController extends Controller
         $blog_user->save();
         return response()->json(['success' => true, 'data' => 'ok']);
     }
+	public function user_details($user_id){
+		  $user = BlogUser::where('user_id', $user_id)->first(); // model or null
+		  $post_links = UserSharing::where('user_id', $user_id)->get();	
+		   
+          $total_pay = UserSharing::where('user_id', $user->user_id)->sum('price');
+        //dd($total_pay);
+       // $post_info = $this->get_post_info_from_blog($post_link->post_id);
+      //  $post_info->link = $post_link->post_link;
+        return view('page.user_detail', ['posts' => $post_links, 'total_pay' => $total_pay, 'user_info' => $user]);
+	}
 }
