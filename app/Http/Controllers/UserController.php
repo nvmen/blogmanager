@@ -170,12 +170,13 @@ class UserController extends Controller
     }
 	public function user_details($user_id){
 		  $user = BlogUser::where('user_id', $user_id)->first(); // model or null
-		  $post_links = UserSharing::where('user_id', $user_id)->get();	
-		   
+		  $post_links = UserSharing::where('user_id', $user_id)->get();
           $total_pay = UserSharing::where('user_id', $user->user_id)->sum('price');
-        //dd($total_pay);
-       // $post_info = $this->get_post_info_from_blog($post_link->post_id);
-      //  $post_info->link = $post_link->post_link;
         return view('page.user_detail', ['posts' => $post_links, 'total_pay' => $total_pay, 'user_info' => $user]);
 	}
+    public function user_details_info($user_id){
+        $user = BlogUser::where('user_id', $user_id)->first(); // model or null
+        return response()->json(['success' => true, 'data' => $user]);
+    }
+
 }

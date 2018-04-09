@@ -57,9 +57,9 @@ class BlogController extends Controller
     {
 
         $post_link = UserSharing::where('id', $id)->first();
+        if($post_link == null) return view('errors.404');
         $post_links = UserSharing::where('post_link', $post_link->post_link)->get();
         $total_pay = UserSharing::where('post_link', $post_link->post_link)->sum('price');
-        //dd($total_pay);
         $post_info = $this->get_post_info_from_blog($post_link->post_id);
         $post_info->link = $post_link->post_link;
         return view('page.post_detail', ['posts' => $post_links, 'total_pay' => $total_pay, 'post_info' => $post_info]);
@@ -67,12 +67,67 @@ class BlogController extends Controller
 
     private function get_post_info_from_blog($blog_id)
     {
+
+        $response_data = null;
+        $url_temp = GET_INFO_POST_ID.$blog_id;
+        $client = new Client();
+        $token = TOKEN_ACCESS_BLOG;
+        $response = $client->request('GET', $url_temp, [
+            'headers' => [
+                'User-Agent' => 'testing/1.0',
+                'Accept' => 'application/json',
+                'X-Foo' => ['Bar', 'Baz'],
+                'token' => $token,
+            ],
+            'body' => '{}'
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
         $post_blog = new PostBlog();
-        $post_blog->id = 1;
-        $post_blog->is_campaign = true;
-        $post_blog->budget = 2000000;
+        $post_blog->id = $blog_id;
+        $post_blog->is_campaign = $body->campaign==0?false:true;
+        $post_blog->budget = $body->budget;
 
         return $post_blog;
+    }
+
+    public  function update_post_campaign(Request $request){
+        $post_id = $request['post_id'];
+        $status = $request['status'];
+        $post_id =93;
+        $response_data = null;
+        //$send_status = $status > 1 ? true : false;
+        $send_status = true;
+        $url_temp = 'http://localhost/monitablog/wp-json/wp/v2/posts/update_post';//UPATE_POST_CAMPAIGN;
+
+        $client = new Client();
+        $token = TOKEN_ACCESS_BLOG;
+
+
+        try {
+            $response = $client->request('POST', $url_temp, [
+                'headers' => [
+                    'User-Agent' => 'testing/1.0',
+                    'Accept' => 'application/json',
+                    'token' => $token,
+                ],
+                'body' => '{
+                    "post_id":"' . $post_id . '",
+                    "key":"is_campaign",
+                    "value":"' . $send_status . '"}'
+
+            ]);
+            $body = json_decode($response->getBody()->getContents());
+            dd($body);
+        } catch (RequestException $e) {
+            $result = array('success' => false,
+                'message' => "Some thing wrong with authentication.");
+            return response()->json($result, 404);
+        }
+
+
+
+
     }
 
 }

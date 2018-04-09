@@ -13,10 +13,15 @@ if($mode == "develop"){
     define('GET_NEW_USER_REGISTER', 'http://localhost/monitablog/wp-json/wp/v2/users/allusers');
     define('UPDATE_STATUS_USER', 'http://localhost/monitablog/wp-json/wp/v2/users/updateuser');
     define('VERIFY_TOKEN_BLOG', 'http://localhost/monitablog/wp-json/jwt-auth/v1/token/validate');
+    define('GET_INFO_POST_ID', 'http://localhost/monitablog/wp-json/wp/v2/posts/postinfo/');// get info post {id}
+    define('UPATE_POST_CAMPAIGN', 'http://localhost/monitablog/wp-json/wp/v2/posts/update_post');
+
 
 }else{
     define('GET_NEW_USER_REGISTER', 'https://letup.com.vn/wp-json/wp/v2/users/allusers');
     define('UPDATE_STATUS_USER', 'https://letup.com.vn/wp-json/wp/v2/users/updateuser');
     define('VERIFY_TOKEN_BLOG', 'https://letup.com.vn/wp-json/jwt-auth/v1/token/validate');
+    define('GET_INFO_POST_ID', 'https://letup.com.vn/wp-json/wp/v2/posts/postinfo/');// get info post {id}
+    define('UPATE_POST_CAMPAIGN', 'https://letup.com.vn/wp-json/wp/v2/posts/update_post');
 
 }

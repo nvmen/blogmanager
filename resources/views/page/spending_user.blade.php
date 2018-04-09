@@ -56,7 +56,7 @@
                                         - {{$user['twitter_price']}} </td>
                                     <td style="text-align: right">
                                         <button type="button" class="btn btn-success"
-                                                onclick="show_price('{{route('user.blog.detail',['user_id'=>$user->user_id])}}')">
+                                                onclick="show_price('{{route('user.blog.detail.info',['user_id'=>$user->user_id])}}')">
                                             Price
                                         </button>
                                         <button type="button" class="btn btn-primary" data-toggle="modal"

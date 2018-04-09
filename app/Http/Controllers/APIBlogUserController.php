@@ -189,6 +189,7 @@ class APIBlogUserController extends Controller
         // find user by token
          $blog_user_token = BlogUserToken::where('token',$token)->orderBy('created_at', 'desc')->first();
          $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
+
          //dd($list_share);
         return response()->json($list_share, 200);
     }
@@ -200,6 +201,10 @@ class APIBlogUserController extends Controller
         $blog_user_token = BlogUserToken::where('token',$token)->orderBy('created_at', 'desc')->first();
        // $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
         $blog_user = BlogUser::where('user_id',$blog_user_token->user_id)->first();
+        $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
+        $total_pay = UserSharing::where('user_id', $blog_user_token->user_id)->sum('price');
+        $blog_user->history = $list_share;
+        $blog_user->total_pay = $total_pay;
         //dd($list_share);
         return response()->json($blog_user, 200);
     }

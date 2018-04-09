@@ -42,7 +42,7 @@
                                 <tr>
                                     <td>Action:</td>
                                     <td>
-                                        <button type="button" class="btn btn-success">Stop Campaign</button>
+                                        <button type="button" class="btn btn-success" onclick="save_status('{{$post_info->id}}','{{!$post_info->is_campaign}}')">Stop Campaign</button>
                                     </td>
                                 </tr>
 
@@ -89,5 +89,20 @@
 
         </div>
     </div><!-- .animated -->
-
+<script>
+    var token = '{{ csrf_token() }}';
+    function save_status(id,status) {
+        var url = '{{route('blog.campaign')}}';
+        show_spinner();
+        $.post(url, {
+                    _token: token,
+                    post_id: id,
+                    status: status
+                })
+                .done(function (data) {
+                    hide_spinner();
+                   // window.location.reload();
+                });
+    }
+</script>
 @stop
