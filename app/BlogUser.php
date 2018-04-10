@@ -24,6 +24,7 @@ class BlogUser extends Model
         'status',
         'facebook_price',
         'twitter_price',
+        'balance',
         'zalo_price',
         'created_at',
         'updated_at',

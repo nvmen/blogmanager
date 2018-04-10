@@ -113,7 +113,7 @@ class APIBlogUserController extends Controller
             $result = array('success' => false,
                 'message' => "Some thing wrong with authentication.");
             return response()->json($result, 404);
-         }
+        }
 
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
@@ -186,25 +186,53 @@ class APIBlogUserController extends Controller
     {
         $header = $request->header('Authorization');
         $token = str_replace('Bearer ', '', $header);
+        $token = str_replace('bearer ', '', $header);
         // find user by token
-         $blog_user_token = BlogUserToken::where('token',$token)->orderBy('created_at', 'desc')->first();
-         $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
+        $blog_user_token = BlogUserToken::where('token',$token)->orderBy('created_at', 'desc')->first();
+        $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
 
-         //dd($list_share);
+        //dd($list_share);
         return response()->json($list_share, 200);
     }
     public function get_user_info(Request $request)
     {
         $header = $request->header('Authorization');
-        $token = str_replace('Bearer ', '', $header);
-        // find user by token
-        $blog_user_token = BlogUserToken::where('token',$token)->orderBy('created_at', 'desc')->first();
-       // $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
-        $blog_user = BlogUser::where('user_id',$blog_user_token->user_id)->first();
-        $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
-        $total_pay = UserSharing::where('user_id', $blog_user_token->user_id)->sum('price');
-        $blog_user->history = $list_share;
-        $blog_user->total_pay = $total_pay;
+        $token = trim(str_replace("Bearer","",$header));
+        $url_token_verify_token = VERIFY_TOKEN_BLOG;
+        $token_bearer = 'Bearer ' . $token;
+        $client = new Client();
+
+        $body = null;
+        try {
+            $response = $client->request('POST', $url_token_verify_token, [
+                'headers' => [
+                    'User-Agent' => 'testing/1.0',
+                    'Accept' => 'application/json',
+                    'Authorization' => $token_bearer,
+                ],
+                'body' => '{}'
+
+            ]);
+            $body = json_decode($response->getBody()->getContents());
+        } catch (RequestException $e) {
+
+        }
+        if( 1/*$body!= null && $body->code =='jwt_auth_valid_token'*/){
+
+            $blog_user_token = BlogUserToken::where('token','like','%'.$token.'%')->orderBy('created_at', 'desc')->first();
+            $blog_user = BlogUser::where('user_id',$blog_user_token->user_id)->first();
+            $list_share = UserSharing::where('user_id',$blog_user_token->user_id)->orderBy('created_at', 'desc')->get();
+            $total_pay = UserSharing::where('user_id', $blog_user_token->user_id)->sum('price');
+
+            $blog_user->history = $list_share;
+            $blog_user->total_pay = $total_pay;
+
+        }else{
+            return response()->json(null, 200);
+        }
+
+
+
         //dd($list_share);
         return response()->json($blog_user, 200);
     }
