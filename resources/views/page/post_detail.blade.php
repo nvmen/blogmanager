@@ -17,7 +17,7 @@
                                 <tbody>
                                 <tr>
                                     <td>Post Link:</td>
-                                    <td>www.google.com.vn</td>
+                                    <td>{{$post_info->link}}</td>
                                 </tr>
                                 <tr>
                                     <td>Balance:</td>
@@ -30,7 +30,7 @@
 
                                 <tr>
 
-                                    <td>Status:</td>
+                                    <td>Status: {{$post_info->is_campaign}}</td>
                                     <td> @if($post_info->is_campaign)In Campaign @else Stop Campaign @endif</td>
                                 </tr>
 
@@ -42,7 +42,9 @@
                                 <tr>
                                     <td>Action:</td>
                                     <td>
-                                        <button type="button" class="btn btn-success" onclick="save_status('{{$post_info->id}}','{{!$post_info->is_campaign}}')">Stop Campaign</button>
+                                        <button type="button" class="btn btn-success" onclick="save_status('{{$post_info->id}}','{{$post_info->is_campaign==1?0:1}}')">										
+										@if($post_info->is_campaign)Stop Campaign @else Start Campaign @endif
+										</button>
                                     </td>
                                 </tr>
 
@@ -72,7 +74,7 @@
                             <tbody>
                             @foreach($posts as $post)
                                 <tr>
-                                    <td>{{$post->user_id}}</td>
+                                    <td>{{$post->name}} ID({{$post->user_id}})</td>
                                     <td>{{number_format($post->price)}}</td>
                                     <td>{{$post->platform}}</td>
                                     <td>{{App\Helper::get_text_pay($post->paid)}}</td>
@@ -101,7 +103,7 @@
                 })
                 .done(function (data) {
                     hide_spinner();
-                   // window.location.reload();
+                    window.location.reload();
                 });
     }
 </script>

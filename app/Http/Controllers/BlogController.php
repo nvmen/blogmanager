@@ -37,15 +37,18 @@ class BlogController extends Controller
             $post_links = UserSharing::select('post_link', 'id')->where('post_link', 'like', '%$search%')->distinct()->get();
         }
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $perPage = 2;
+        $perPage = 20;
         $temp = $post_links->forPage($currentPage, $perPage);
         foreach ($temp as &$t) {
             $sum_payment = UserSharing::groupBy('post_link')->where('post_link', $t->post_link)->selectRaw('sum(price) as sum')->get()->first();
-            $t['balance'] = 100;
+			 $post_link_temp = UserSharing::where('post_link',$t->post_link)->first();
+            $post_info = $this->get_post_info_from_blog( $post_link_temp->post_id);			
+            $t['balance'] = $post_info->budget;
+           // $t['balance'] = 100;
             $t['total_pay'] = $sum_payment->sum;
 
         }
-        //dd($temp);
+       // dd($temp);
         $paginatedSearchResults = new LengthAwarePaginator($temp, count($post_links), $perPage);
 
         $paginatedSearchResults->appends(['search' => $request['search']]);
@@ -61,7 +64,11 @@ class BlogController extends Controller
         $post_links = UserSharing::where('post_link', $post_link->post_link)->get();
         $total_pay = UserSharing::where('post_link', $post_link->post_link)->sum('price');
         $post_info = $this->get_post_info_from_blog($post_link->post_id);
-        $post_info->link = $post_link->post_link;
+        
+			
+        $post_info = $this->get_post_info_from_blog( $post_link->post_id);			
+		$post_info->budget  = $post_info->budget; 
+		$post_info->link = $post_link->post_link;	
         return view('page.post_detail', ['posts' => $post_links, 'total_pay' => $total_pay, 'post_info' => $post_info]);
     }
 
@@ -94,16 +101,20 @@ class BlogController extends Controller
     public  function update_post_campaign(Request $request){
         $post_id = $request['post_id'];
         $status = $request['status'];
-        $post_id =93;
+       
         $response_data = null;
-        //$send_status = $status > 1 ? true : false;
-        $send_status = true;
-        $url_temp = 'http://localhost/monitablog/wp-json/wp/v2/posts/update_post';//UPATE_POST_CAMPAIGN;
+        $send_status = $status > 0 ? true : false;
+    
+        $url_temp = UPATE_POST_CAMPAIGN;//UPATE_POST_CAMPAIGN;
 
         $client = new Client();
         $token = TOKEN_ACCESS_BLOG;
-
-
+		$myObject  = array( 'post_id'=>$post_id,
+							'key'=>'enable_campaign',
+							'value'=> $send_status
+		                  );
+		$post_data = json_encode($myObject);
+		 //  return response()->json($post_data, 200);
         try {
             $response = $client->request('POST', $url_temp, [
                 'headers' => [
@@ -111,20 +122,19 @@ class BlogController extends Controller
                     'Accept' => 'application/json',
                     'token' => $token,
                 ],
-                'body' => '{
-                    "post_id":"' . $post_id . '",
-                    "key":"is_campaign",
-                    "value":"' . $send_status . '"}'
+                'body' => $post_data
 
             ]);
             $body = json_decode($response->getBody()->getContents());
-            dd($body);
+          
         } catch (RequestException $e) {
             $result = array('success' => false,
                 'message' => "Some thing wrong with authentication.");
-            return response()->json($result, 404);
+            return response()->json($e, 404);
         }
-
+		$result = array('success' => true,
+                'message' => "Ok message.",'data'=>$body);
+            return response()->json($result, 200);
 
 
 

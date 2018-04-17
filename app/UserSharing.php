@@ -15,6 +15,7 @@ class UserSharing  extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'name',
         'post_link',
         'post_id',
         'platform',

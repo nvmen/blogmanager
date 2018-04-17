@@ -1,6 +1,6 @@
 @extends('layout.admin')
-@section('pageTitle', 'Spending Users')
-@section('mainTitle', 'Spending Users')
+@section('pageTitle', 'Share Post')
+@section('mainTitle', 'Share Post')
 @section('content')
     <div class="animated fadeIn">
         <div class="row">
@@ -64,7 +64,7 @@
                             </tbody>
                         </table>
                         <div class="navigation paging-navigation" role="navigation">
-
+                            {!! $blogs->links() !!}
                         </div>
                     </div>
                 </div>

@@ -125,9 +125,10 @@ class UserController extends Controller
     public function approve_user(Request $request)
     {
         $response_data = null;
-        $status = $request['status'];
+        $status = (int)($request['status']);
         $user_id = $request['user_id'];
-        $send_status = $status > 1 ? true : false;
+        $send_status =$status ;// $status > 0 ? true : false;
+		
         $url_temp = UPDATE_STATUS_USER;
         $client = new Client();
         $token = TOKEN_ACCESS_BLOG;
@@ -147,7 +148,7 @@ class UserController extends Controller
 
 
         $body = json_decode($response->getBody()->getContents());
-
+    
         if ($body->status) {
             $user = BlogUser::where('user_id', $user_id)->first(); // model or null
             $user->status = $status;
