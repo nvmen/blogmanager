@@ -139,5 +139,52 @@ class BlogController extends Controller
 
 
     }
+    function IsNullOrEmptyString($question){
+        return (!isset($question) || trim($question)==='');
+    }
+    public function get_post_from_blog(Request $request){
+        $response_data = null;
 
+        $search = $request['search'];
+        $url_temp = GET_ALL_POST_FROM_BLOG;
+        $client = new Client();
+        $token = TOKEN_ACCESS_BLOG;
+        $response = $client->request('GET', $url_temp, [
+            'headers' => [
+                'User-Agent' => 'testing/1.0',
+                'Accept' => 'application/json',
+                'X-Foo' => ['Bar', 'Baz'],
+                'token' => $token,
+            ],
+            'body' => '{}'
+        ]);
+
+        $body = json_decode($response->getBody()->getContents());
+        //dd($body->posts);
+        $post_result =[];
+        if($this->IsNullOrEmptyString( $search)){
+            $posts = $body->posts;
+            foreach ($body->posts as $post) {
+                $value = UserSharing::where('post_id',$post->id)->sum('price');
+                $post->total_pay = $value;
+            }
+            $post_result = $posts;
+        }else{
+            foreach ($body->posts as $post) {
+                if(strpos($post->post_title,  $search)){
+                    $value = UserSharing::where('post_id',$post->id)->sum('price');
+                    $post->total_pay = $value;
+                    $post_result[] = $post;
+                }
+
+            }
+        }
+        /*
+        foreach ($posts as &$post) {
+           $value = UserSharing::where('post_id',$post->id)->sum('price');
+            $post->total_pay = $value;
+        }*/
+
+        return view('page.post_from_blog',['posts'=>$post_result,'search'=>$search]);
+    }
 }

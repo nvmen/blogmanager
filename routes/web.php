@@ -31,6 +31,7 @@ Route::group(['prefix' => 'blog'], function () {
     Route::get('/blog-share', ['uses' => 'BlogController@index', 'as' => 'blog.user.share']);
     Route::get('/blog-detail/{id}', ['uses' => 'BlogController@details', 'as' => 'blog.user.share.details']);
     Route::post('/update-campaign', ['uses' => 'BlogController@update_post_campaign', 'as' => 'blog.campaign']);
+    Route::get('/posts-from-blog', ['uses' => 'BlogController@get_post_from_blog', 'as' => 'blog.posts']);
 
 });
 

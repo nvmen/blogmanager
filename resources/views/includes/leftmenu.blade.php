@@ -23,7 +23,7 @@
                     <a href="{{route('user.blog')}}"> <i class="menu-icon fa fa-users"></i>Blog Users </a>
                 </li>
                 <li>
-                    <a href="{{route('user.blog')}}"> <i class="menu-icon fa fa-users"></i>Blog Post </a>
+                    <a href="{{route('blog.posts')}}"> <i class="menu-icon fa fa-users"></i>Blog Post </a>
                 </li>
                 <li>
                     <a href="{{route('blog.user.share')}}"> <i class="menu-icon fa fa-users"></i>Sharing Post </a>

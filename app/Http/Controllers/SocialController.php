@@ -30,7 +30,7 @@ class SocialController  extends Controller
 
         $social = Social::find($social_id );
 
-        $social->status = 1;
+        $social->status = $request['status'];
         $social->save();
 
         return response()->json(['success' => true]);

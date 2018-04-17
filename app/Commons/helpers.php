@@ -14,6 +14,7 @@ define('TOKEN_ACCESS_BLOG', 'O2oYPjiKE9JBxbi3vUZmrc1BqMaIyGLXfgxYIUgFoYMbVEegUls
     define('VERIFY_TOKEN_BLOG', 'https://letup.com.vn/wp-json/jwt-auth/v1/token/validate');
     define('GET_INFO_POST_ID', 'https://letup.com.vn/wp-json/wp/v2/posts/postinfo/');// get info post {id}
     define('UPATE_POST_CAMPAIGN', 'https://letup.com.vn/wp-json/wp/v2/posts/update_post');
+    define('GET_ALL_POST_FROM_BLOG', 'https://letup.com.vn/wp-json/wp/v2/posts/allposts');
     define('POST_SHARE_PER_DAY', 3);
 
 
