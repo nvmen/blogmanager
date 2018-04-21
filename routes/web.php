@@ -16,6 +16,7 @@ Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
 Route::get('/login', ['uses' => 'Auth\LoginController@login', 'as' => 'login.view']);
 Route::post('/login', ['uses' => 'Auth\LoginController@doLogin', 'as' => 'login.do']);
+Route::get('/auth/logout', ['uses' => 'Auth\LoginController@logout', 'as' => 'user.logout']);
 
 Route::group(['prefix' => 'users'], function () {
     Route::get('/blog-users', ['uses' => 'UserController@index', 'as' => 'user.blog']);
@@ -38,4 +39,12 @@ Route::group(['prefix' => 'socials'], function () {
     Route::get('/', ['uses' => 'SocialController@index', 'as' => 'social.network']);
     Route::post('/update', ['uses' => 'SocialController@update', 'as' => 'social.network.update']);
 
+});
+
+Route::group(['prefix' => 'profile'], function () {
+
+    Route::get('/', ['uses' => 'ProfileController@index', 'as' => 'profile.user']);
+    Route::post('/update', ['uses' => 'ProfileController@user_update', 'as' => 'profile.user.update']);
+    Route::get('/change-password', ['uses' => 'ProfileController@change_password', 'as' => 'profile.change.password']);
+    Route::post('/change-password', ['uses' => 'ProfileController@do_change_password', 'as' => 'profile.do.change.password']);
 });

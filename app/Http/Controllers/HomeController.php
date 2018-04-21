@@ -30,5 +30,9 @@ class HomeController  extends Controller
         
         return view('page.home');
     }
+    public function profile(Request $request){
+
+        return view('page.home');
+    }
 
 }

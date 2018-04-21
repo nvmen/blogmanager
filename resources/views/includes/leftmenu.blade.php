@@ -6,7 +6,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="{{route('home')}}"><img src="{{ URL::asset('images/logo.png') }}" alt="Logo"></a>
+            <a class="navbar-brand" href="{{route('home')}}"><img src="https://www.monita.vn/images/frontend/logo.png" alt="Logo"></a>
             <a class="navbar-brand hidden" href="{{route('home')}}"><img src="{{ URL::asset('images/logo2.png') }}" alt="Logo"></a>
         </div>
 
@@ -15,7 +15,7 @@
                 <li class="active">
                     <a href="{{route('home')}}"> <i class="menu-icon fa fa-dashboard"></i>Dashboard </a>
                 </li>
-                <h3 class="menu-title">System Blog</h3><!-- /.menu-title -->
+                <h3 class="menu-title">Monita</h3><!-- /.menu-title -->
                 <li>
                     <a href="{{route('social.network')}}"> <i class="menu-icon fa fa-dribbble"></i>Social Network </a>
                 </li>

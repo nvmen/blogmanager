@@ -28,6 +28,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ URL::asset('js/jquery.nimble.loader.js') }}"></script>
     <script src="{{ URL::asset('js/common.js') }}"></script>
+
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 </head>
@@ -84,7 +85,7 @@
 <script src="{{ URL::asset('assets/js/plugins.js') }}"></script>
 <script src="{{ URL::asset('assets/js/main.js') }}"></script>
 
-
+<script type="text/javascript" src="{{ URL::asset('js/notify.min.js') }}"></script>
 <!--<script src="{{ URL::asset('assets/js/lib/chart-js/Chart.bundle.js') }}"></script>
 <script src="{{ URL::asset('assets/js/dashboard.js') }}"></script>
 <script src="{{ URL::asset('assets/js/widgets.js') }}"></script>
