@@ -35,9 +35,8 @@
                                 <th>No</th>
                                 <th>PostLink</th>
                                 <th>Balance</th>
-                                <th>Total Pay</th>
-                                <th>View</th>
-                                <th>Action</th>
+                                <th>Total Pay</th>                               
+                                <th>Campaign</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -54,8 +53,12 @@
                                     </td>
                                     <td>{{$blog->balance}}</td>
                                     <td>{{$blog->total_pay}}</td>
-                                    <td>view</td>
-                                    <td>Stop</td>
+                                   
+                                    <td>
+									 <button type="button" class="btn btn-success" onclick="save_status('{{$blog->post_id}}','{{$blog->is_campaign==1?0:1}}')">									
+										@if($blog->is_campaign)Stop Campaign @else Start Campaign @endif
+										</button>
+									</td>
                                 </tr>
                                 @php
                                 $index = $index+ 1;
@@ -74,6 +77,22 @@
         </div>
     </div><!-- .animated -->
 
+	<script>
+	  var token = '{{ csrf_token() }}';
+    function save_status(id,status) {
+        var url = '{{route('blog.campaign')}}';
+        show_spinner();
+        $.post(url, {
+                    _token: token,
+                    post_id: id,
+                    status: status
+                })
+                .done(function (data) {
+                    hide_spinner();
+                    window.location.reload();
+                });
+    }
+	</script>
 
 
 

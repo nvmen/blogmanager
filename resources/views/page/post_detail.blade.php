@@ -17,7 +17,7 @@
                                 <tbody>
                                 <tr>
                                     <td>Post Link:</td>
-                                    <td>{{$post_info->link}}</td>
+                                    <td><a href ="{{$post_info->link}}">{{$post_info->link}}</a></td>
                                 </tr>
                                 <tr>
                                     <td>Balance:</td>
@@ -30,7 +30,7 @@
 
                                 <tr>
 
-                                    <td>Status: {{$post_info->is_campaign}}</td>
+                                    <td>Status: </td>
                                     <td> @if($post_info->is_campaign)In Campaign @else Stop Campaign @endif</td>
                                 </tr>
 
@@ -42,7 +42,7 @@
                                 <tr>
                                     <td>Action:</td>
                                     <td>
-                                        <button type="button" class="btn btn-success" onclick="save_status('{{$post_info->id}}','{{$post_info->is_campaign==1?0:1}}')">										
+                                        <button type="button" class="btn btn-success" onclick="save_status('{{$post_info->post_id}}','{{$post_info->is_campaign==1?0:1}}')">										
 										@if($post_info->is_campaign)Stop Campaign @else Start Campaign @endif
 										</button>
                                     </td>

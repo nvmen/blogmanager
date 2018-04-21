@@ -44,6 +44,8 @@ class BlogController extends Controller
 			 $post_link_temp = UserSharing::where('post_link',$t->post_link)->first();
             $post_info = $this->get_post_info_from_blog( $post_link_temp->post_id);			
             $t['balance'] = $post_info->budget;
+			$t['post_id'] = $post_link_temp->post_id;
+			$t['is_campaign'] = $post_info->is_campaign;
            // $t['balance'] = 100;
             $t['total_pay'] = $sum_payment->sum;
 
@@ -143,9 +145,8 @@ class BlogController extends Controller
         return (!isset($question) || trim($question)==='');
     }
     public function get_post_from_blog(Request $request){
-        $response_data = null;
-
-        $search = $request['search'];
+       
+		$search = $request['search'];
         $url_temp = GET_ALL_POST_FROM_BLOG;
         $client = new Client();
         $token = TOKEN_ACCESS_BLOG;
@@ -171,11 +172,12 @@ class BlogController extends Controller
             $post_result = $posts;
         }else{
             foreach ($body->posts as $post) {
-                if(strpos($post->post_title,  $search)){
-                    $value = UserSharing::where('post_id',$post->id)->sum('price');
+				if(strpos($post->post_title, $search) !== false){
+					  $value = UserSharing::where('post_id',$post->id)->sum('price');
                     $post->total_pay = $value;
                     $post_result[] = $post;
-                }
+				}
+               
 
             }
         }

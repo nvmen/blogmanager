@@ -11,9 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
 Route::get('/login', ['uses' => 'Auth\LoginController@login', 'as' => 'login.view']);
 Route::post('/login', ['uses' => 'Auth\LoginController@doLogin', 'as' => 'login.do']);

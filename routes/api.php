@@ -24,8 +24,9 @@ Route::group([], function () {
     Route::get('list-share-post', ['uses' => 'APIBlogUserController@get_sharing_by_user', 'as' => 'user.list.share.post']);
     Route::post('user-info', ['uses' => 'APIBlogUserController@get_user_info', 'as' => 'user.info']);
     Route::get('test', ['uses' => 'APIBlogUserController@test', 'as' => 'user.test']);
+	Route::post('can-share', ['uses' => 'APIBlogUserController@canshare', 'as' => 'user.canshare']);
 
 });
 
 Route::post('save-token', ['uses' => 'APIBlogUserController@save_token', 'as' => 'user.token']);
-   
+    
