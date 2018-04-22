@@ -31,12 +31,21 @@ class Helper extends Model
     }
 	public  static  function  check_post_share_in_day($user_id,$platform)
     {
+        /*
        $records_share_per_day = DB::table('user_sharing')
 								->where('user_id', $user_id)	   
 								->where('platform', $platform)	   
 								->whereRaw('created_at >= curdate()')
 								->whereRaw('created_at < CURDATE() + INTERVAL 1 DAY')
 			->get();
+        */
+        $records_share_per_day = DB::table('user_sharing')
+            ->where('user_id', $user_id)
+            ->where('platform', $platform)
+            ->whereRaw('DATE(created_at) = DATE(NOW())')
+            ->get();
+
+
 		  if(count($records_share_per_day)< POST_SHARE_PER_DAY){
 			return  true;	  
 		  }else{

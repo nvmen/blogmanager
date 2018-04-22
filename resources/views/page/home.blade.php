@@ -2,6 +2,16 @@
 @section('pageTitle', 'Dashboard')
 @section('mainTitle', 'Dashboard')
 @section('content')
+    <style>
+        .social-box.zalo i {
+            color: #fff;
+            background:#e9f86b;
+            height: 110px;
+        }
+        .fa-zalo{
+            background: url(https://stc.sp.zdn.vn/share/logo_white_s.png);
+        }
+    </style>
     <div class="animated fadeIn">
         <div class="col-sm-12">
 
@@ -9,21 +19,12 @@
                 <div class="card text-white bg-flat-color-1">
                     <div class="card-body pb-0">
                         <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
+
                         </div>
                         <h4 class="mb-0">
-                            <span class="count">10468</span>
+                            <span class="count">{{$active_user}}</span>
                         </h4>
-                        <p class="text-light">Members online</p>
+                        <p class="text-light">Active users</p>
 
                         <div class="chart-wrapper px-0" style="height:70px;" height="70">
                             <canvas id="widgetChart1"></canvas>
@@ -39,21 +40,12 @@
                 <div class="card text-white bg-flat-color-2">
                     <div class="card-body pb-0">
                         <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
+
                         </div>
                         <h4 class="mb-0">
-                            <span class="count">10468</span>
+                            <span class="count">{{$user_inactive}}</span>
                         </h4>
-                        <p class="text-light">Members online</p>
+                        <p class="text-light">Inactive users</p>
 
                         <div class="chart-wrapper px-0" style="height:70px;" height="70">
                             <canvas id="widgetChart2"></canvas>
@@ -68,21 +60,12 @@
                 <div class="card text-white bg-flat-color-3">
                     <div class="card-body pb-0">
                         <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
+
                         </div>
                         <h4 class="mb-0">
-                            <span class="count">10468</span>
+                            <span class="count">{{$today_share}}</span>
                         </h4>
-                        <p class="text-light">Members online</p>
+                        <p class="text-light">Today shares</p>
 
                     </div>
 
@@ -97,21 +80,11 @@
                 <div class="card text-white bg-flat-color-4">
                     <div class="card-body pb-0">
                         <div class="dropdown float-right">
-                            <button class="btn bg-transparent dropdown-toggle theme-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div class="dropdown-menu-content">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
                         </div>
                         <h4 class="mb-0">
-                            <span class="count">10468</span>
+                            <span class="count">{{$post_share_in_day}}</span>
                         </h4>
-                        <p class="text-light">Members online</p>
+                        <p class="text-light">Today post shared</p>
 
                         <div class="chart-wrapper px-3" style="height:70px;" height="70">
                          
@@ -127,18 +100,17 @@
                     <i class="fa fa-facebook"></i>
                     <ul>
                         <li>
-                            <strong><span class="count">40</span> k</strong>
-                                <span>friends</span>
+                            <strong><span class="count">{{$facebook_share_total}}</span> </strong>
+                                <span>Total</span>
                         </li>
                         <li>
-                            <strong><span class="count">450</span></strong>
-                                <span>feeds</span>
+                            <strong><span class="count">{{$facebook_share_in_day}}</span></strong>
+                                <span>Today</span>
                         </li>
                     </ul>
                 </div>
                 <!--/social-box-->
             </div><!--/.col-->
-
 
             <div class="col-lg-3 col-md-6">
                 <div class="social-box twitter">
@@ -146,11 +118,11 @@
                     <ul>
                         <li>
                             <strong><span class="count">30</span> k</strong>
-                                <span>friends</span>
+                                <span>Total</span>
                         </li>
                         <li>
                             <strong><span class="count">450</span></strong>
-                                <span>tweets</span>
+                                <span>Today</span>
                         </li>
                     </ul>
                 </div>
@@ -164,11 +136,11 @@
                     <ul>
                         <li>
                             <strong><span class="count">40</span> +</strong>
-                                <span>contacts</span>
+                                <span>Total</span>
                         </li>
                         <li>
                             <strong><span class="count">250</span></strong>
-                                <span>feeds</span>
+                                <span>Today</span>
                         </li>
                     </ul>
                 </div>
@@ -177,16 +149,18 @@
 
 
             <div class="col-lg-3 col-md-6">
-                <div class="social-box google-plus">
-                    <i class="fa fa-google-plus"></i>
+                <div class="social-box zalo">
+                    <i class="fa fa-zalo">
+                        <img src="http://vnbox.vn/profiles/vnboxvn/uploads/attach/post/images/zalo.png" width="40">
+                    </i>
                     <ul>
                         <li>
                             <strong><span class="count">94</span> k</strong>
-                                <span>followers</span>
+                                <span>Total</span>
                         </li>
                         <li>
                             <strong><span class="count">92</span></strong>
-                                <span>circles</span>
+                                <span>Today</span>
                         </li>
                     </ul>
                 </div>

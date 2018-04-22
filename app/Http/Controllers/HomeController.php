@@ -27,12 +27,40 @@ class HomeController  extends Controller
         $this->middleware('auth');
     }
     public function index(Request $request){
-        
-        return view('page.home');
-    }
-    public function profile(Request $request){
 
-        return view('page.home');
+        //all user active
+        $user_active = BlogUser::where('status',1)->count();
+        $user_inactive = BlogUser::where('status',0)->count();
+        $records_share_in_day = DB::table('user_sharing')
+            ->whereRaw('DATE(created_at) = DATE(NOW())')
+             ->count();
+
+        $post_share_in_day = DB::table('user_sharing')
+            ->whereRaw('DATE(created_at) = DATE(NOW())')
+            ->groupBy('post_id')
+            ->select('post_id')->get()->count();
+
+
+        $facebook_share_in_day = DB::table('user_sharing')
+            ->whereRaw('DATE(created_at) = DATE(NOW())')
+            ->where('platform','facebook')
+            ->groupBy('post_id')
+            ->select('post_id')->get()->count();
+
+        $facebook_share_total = DB::table('user_sharing')
+            ->where('platform','facebook')
+            ->groupBy('post_id')
+            ->select('post_id')->get()->count();
+
+    //   dd( $post_share_in_day );
+        return view('page.home',['active_user'=> $user_active,
+                                'user_inactive'=> $user_inactive,
+                                'today_share'=> $records_share_in_day,
+                                'post_share_in_day' => $post_share_in_day,
+                                'facebook_share_in_day' => $facebook_share_in_day,
+                                'facebook_share_total' => $facebook_share_total
+        ]);
     }
+   
 
 }
