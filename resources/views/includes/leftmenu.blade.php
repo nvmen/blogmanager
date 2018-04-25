@@ -30,7 +30,7 @@
                 </li>
                 <h3 class="menu-title">Payment</h3><!-- /.menu-title -->
                 <li>
-                    <a href="{{route('user.blog')}}"> <i class="menu-icon fa fa-users"></i>Payment </a>
+                    <a href="{{route('payment.index')}}"> <i class="menu-icon fa fa-users"></i>Payment </a>
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->

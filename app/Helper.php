@@ -29,6 +29,23 @@ class Helper extends Model
         if($value==1) return 'Verifying';
         if($value==2) return 'Verified';
     }
+    public  static function read_more($string){
+        if($string == null){
+            return '---';
+        }
+        $string = strip_tags($string);
+        if (strlen($string) > 20) {
+
+            // truncate string
+            $stringCut = substr($string, 0, 20);
+            $endPoint = strrpos($stringCut, ' ');
+
+            //if the string doesn't contain any space then it will cut without word basis.
+            $string = $endPoint? substr($stringCut, 0, $endPoint):substr($stringCut, 0);
+            $string .= '...';
+        }
+         return  $string;
+    }
 	public  static  function  check_post_share_in_day($user_id,$platform)
     {
         /*
