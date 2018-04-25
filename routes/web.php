@@ -48,3 +48,11 @@ Route::group(['prefix' => 'profile'], function () {
     Route::get('/change-password', ['uses' => 'ProfileController@change_password', 'as' => 'profile.change.password']);
     Route::post('/change-password', ['uses' => 'ProfileController@do_change_password', 'as' => 'profile.do.change.password']);
 });
+
+
+Route::group(['prefix' => 'payment'], function () {
+    Route::get('/', ['uses' => 'HomeController@request_payment', 'as' => 'payment.index']);
+    Route::post('/reject-request', ['uses' => 'HomeController@submit_reject_request', 'as' => 'payment.reject.request']);
+    Route::post('/accept-request', ['uses' => 'HomeController@submit_accept_request', 'as' => 'payment.accept.request']);
+
+});

@@ -37,6 +37,7 @@
                                 <th>Facebook Profile</th>
                                 <th>Fanpage</th>
                                 <th>Facebook - Zalo - twitter - Price</th>
+                                <th>Balance</th>
                                 <th>Approved</th>
                             </tr>
                             </thead>
@@ -54,6 +55,7 @@
                                     </td>
                                     <td>{{$user['facebook_price']}} - {{$user['zalo_price']}}
                                         - {{$user['twitter_price']}} </td>
+                                    <td>{{number_format($user->balance,0) }}</td>
                                     <td style="text-align: right">
                                         <button type="button" class="btn btn-success"
                                                 onclick="show_price('{{route('user.blog.detail.info',['user_id'=>$user->user_id])}}')">

@@ -47,6 +47,10 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>Balance:</td>
+                                    <td style="color: red;font-weight: bold;">{{number_format($user_info->balance,0) }} VND</td>
+                                </tr>
+                                <tr>
                                     <td>Status:</td>
                                     <td> @if($user_info->status) Approved @else Disapprove @endif</td>
                                 </tr>
